@@ -1,33 +1,13 @@
-import React, { FC, ReactNode, useState } from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import React, { useContext, useEffect } from "react";
+import { AuthProvider, AuthContext } from "./context/AuthContext";
 
-interface Users {
-  name: string;
-  email: string;
-  age: string;
-}
+function App(): JSX.Element {
+  const { isAuthenticated } = useContext(AuthContext);
 
-function App<Users>(props: Users) {
-  const [count, setCount] = useState<number>(0);
+  useEffect(() => console.log("AuthProvider", isAuthenticated), []);
 
   return (
-    <>
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>{props}</p>
-          <p>
-            <button onClick={() => setCount((count) => count + 1)}>
-              count is: {count}
-            </button>
-          </p>
-          <p>
-            Edit <code>App.tsx</code> and save to test HMR updates.
-          </p>
-        </header>
-      </div>
-    </>
+    <AuthProvider>Hello world</AuthProvider>
   );
 }
 
