@@ -3,7 +3,7 @@ import useSWR from "swr";
 
 type methodType = "GET" | "POST" | "PATCH" | "PUT" | "DELETE";
 
-type token = string | undefined;
+type token = string | null;
 
 interface OptionsInterface {
   method?: methodType;
@@ -21,9 +21,9 @@ export function useFetch<Data = any, Error = any>(
     optionalHeaders = {},
   }: OptionsInterface = {}
 ) {
-  const authToken = localStorage.getItem("authToken");
+  const authToken: token = localStorage.getItem("authToken");
 
-  const url: string = `${import.meta.env.VITE_BACKOFFICE_API}${endpoint}`;
+  const url: string = import.meta.env.VITE_BACKOFFICE_API + endpoint;
 
   let headers: HeadersInit = {
     "Content-Type": "application/json",
@@ -36,9 +36,15 @@ export function useFetch<Data = any, Error = any>(
   }
 
   function fetcher() {
-    return fetch(url, { headers, method, body: JSON.stringify(payload) }).then(
-      (res) => res.json()
-    );
+    return fetch(url, { headers, method, body: JSON.stringify(payload) })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.error) {
+          const error = res;
+          throw error;
+        }
+        return res;
+      });
   }
 
   const { data, error, mutate } = useSWR<Data, Error>(url, fetcher);

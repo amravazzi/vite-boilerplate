@@ -26,11 +26,16 @@ interface Auth {
   };
 }
 
+interface Error {
+  error: boolean;
+  message: string;
+}
+
 function App() {
   const { isAuthenticated } = useContext(AuthContext);
-  const [data, error] = useFetch<Auth>("/auth/login", {
+  const [data, error] = useFetch<Auth, Error>("/auth/login", {
     method: "POST",
-    payload: { username: "fulano", password: "123456" },
+    payload: { email: "fulano@example.com", password: "123456" },
   });
 
   useEffect(() => console.log("data", data), [data]);
