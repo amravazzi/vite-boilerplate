@@ -1,15 +1,15 @@
-import React, { ReactNode, createContext, useState } from "react";
+import React, { ReactNode, createContext, useState, useReducer } from "react";
 
 interface ProviderPropsInterface {
   children: ReactNode;
-}
+};
 
 interface AuthContextInterface {
   isLoading: boolean;
   isAuthenticated: boolean;
   handleLogin?: () => void;
   handleLogout?: () => void;
-}
+};
 
 export const AuthContext = createContext<AuthContextInterface>({
   isLoading: false,
